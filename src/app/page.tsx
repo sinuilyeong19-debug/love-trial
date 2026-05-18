@@ -14,6 +14,10 @@ const CATEGORIES = [
   { value: "breakup", label: "😢 이별" },
   { value: "dating", label: "🌸 연애초기" },
   { value: "marriage", label: "💍 결혼" },
+  { value: "work", label: "💼 직장" },
+  { value: "friend", label: "👥 친구" },
+  { value: "family", label: "👨‍👩‍👧 가족" },
+  { value: "daily", label: "📅 일상" },
   { value: "etc", label: "💬 기타" },
 ]
 
@@ -71,10 +75,10 @@ export default async function HomePage({
           </div>
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">연애 재판</h1>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">우리 재판소</h1>
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-            연애 갈등을 올리면 AI 판사가 판결하고<br />
-            커뮤니티가 함께 심판합니다
+            연애, 직장, 친구, 가족 — 어떤 갈등이든<br />
+            AI 판사와 커뮤니티가 판결합니다
           </p>
         </div>
 

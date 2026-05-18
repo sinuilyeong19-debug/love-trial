@@ -13,7 +13,7 @@ interface CaseCardProps {
 }
 
 export default function CaseCard({ caseData, rank }: CaseCardProps) {
-  const total = caseData.vote_my_side + caseData.vote_other_side
+  const total = (caseData.vote_my_side ?? 0) + (caseData.vote_other_side ?? 0)
   const myPercent = total > 0 ? Math.round((caseData.vote_my_side / total) * 100) : 50
   const otherPercent = total > 0 ? 100 - myPercent : 50
 

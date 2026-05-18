@@ -23,3 +23,11 @@ export interface Vote {
   created_at: string
   voter_token: string
 }
+
+export interface Comment {
+  id: string
+  case_id: string
+  nickname: string
+  content: string
+  created_at: string
+}

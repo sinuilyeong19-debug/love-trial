@@ -27,12 +27,22 @@ export function formatDate(dateString: string): string {
 
 export function getCategoryLabel(category: string): string {
   const labels: Record<string, string> = {
-    fight: "다툼",
-    cheating: "바람",
-    breakup: "이별",
-    dating: "연애 초기",
-    marriage: "결혼/약혼",
-    etc: "기타",
+    // 연애
+    fight: "😤 다툼",
+    cheating: "💔 바람",
+    breakup: "😢 이별",
+    dating: "🌸 연애초기",
+    marriage: "💍 결혼",
+    // 직장
+    work: "💼 직장/회사",
+    // 친구
+    friend: "👥 친구",
+    // 가족
+    family: "👨‍👩‍👧 가족",
+    // 일상
+    daily: "📅 일상",
+    // 기타
+    etc: "💬 기타",
   }
   return labels[category] ?? category
 }

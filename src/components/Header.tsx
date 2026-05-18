@@ -17,8 +17,8 @@ export default function Header() {
             <Scale className="h-4 w-4 text-primary" />
           </div>
           <div className="flex items-baseline gap-1">
-            <span className="text-base font-bold text-foreground tracking-tight">연애 재판</span>
-            <span className="text-[10px] text-muted-foreground font-medium hidden sm:inline">LOVE COURT</span>
+            <span className="text-base font-bold text-foreground tracking-tight">우리 재판소</span>
+            <span className="text-[10px] text-muted-foreground font-medium hidden sm:inline">LIFE COURT</span>
           </div>
         </Link>
 

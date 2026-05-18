@@ -10,13 +10,37 @@ import { Textarea } from "@/components/ui/textarea"
 import { Scale, Loader2, AlertCircle } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 
-const CATEGORIES = [
-  { value: "fight", label: "다툼" },
-  { value: "cheating", label: "바람" },
-  { value: "breakup", label: "이별" },
-  { value: "dating", label: "연애 초기" },
-  { value: "marriage", label: "결혼/약혼" },
-  { value: "etc", label: "기타" },
+const CATEGORY_GROUPS = [
+  {
+    group: "💑 연애",
+    categories: [
+      { value: "fight", label: "😤 다툼" },
+      { value: "cheating", label: "💔 바람" },
+      { value: "breakup", label: "😢 이별" },
+      { value: "dating", label: "🌸 연애초기" },
+      { value: "marriage", label: "💍 결혼" },
+    ],
+  },
+  {
+    group: "🏢 직장",
+    categories: [
+      { value: "work", label: "💼 직장/회사" },
+    ],
+  },
+  {
+    group: "👥 관계",
+    categories: [
+      { value: "friend", label: "👥 친구" },
+      { value: "family", label: "👨‍👩‍👧 가족" },
+    ],
+  },
+  {
+    group: "🌐 기타",
+    categories: [
+      { value: "daily", label: "📅 일상" },
+      { value: "etc", label: "💬 기타" },
+    ],
+  },
 ]
 
 export default function SubmitPage() {
@@ -51,7 +75,6 @@ export default function SubmitPage() {
     setError("")
 
     try {
-      // 1. DB에 사연 저장
       const { data: newCase, error: insertError } = await supabase
         .from("cases")
         .insert({
@@ -71,7 +94,7 @@ export default function SubmitPage() {
         return
       }
 
-      // 2. AI 판결 요청 (비동기 — 결과 페이지에서 확인)
+      // AI 판결 요청 (비동기)
       fetch("/api/judge", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,7 +117,8 @@ export default function SubmitPage() {
             사연 올리기
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            상황을 솔직하게 적어주세요. AI 판사가 판결하고 커뮤니티가 투표합니다.
+            연애, 직장, 친구, 가족 등 어떤 갈등이든 판결받을 수 있어요.<br />
+            상황을 솔직하게 적어주세요.
           </p>
         </CardHeader>
 
@@ -107,16 +131,17 @@ export default function SubmitPage() {
               </Label>
               <Input
                 id="title"
-                placeholder="예) 남자친구가 전 여자친구 생일 챙겨줬는데 제가 예민한 건가요?"
+                placeholder="예) 상사가 내 아이디어 가로챘는데 제가 예민한 건가요?"
                 value={form.title}
                 onChange={(e) => update("title", e.target.value)}
                 maxLength={100}
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
+              <p className="text-right text-xs text-muted-foreground">{form.title.length}/100</p>
             </div>
 
             {/* 닉네임 + 카테고리 */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
               <div className="space-y-1.5">
                 <Label htmlFor="nickname" className="text-foreground">닉네임</Label>
                 <Input
@@ -128,22 +153,29 @@ export default function SubmitPage() {
                   className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <Label className="text-foreground">카테고리</Label>
-                <div className="flex flex-wrap gap-1.5">
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.value}
-                      type="button"
-                      onClick={() => update("category", cat.value)}
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium border transition-colors ${
-                        form.category === cat.value
-                          ? "bg-primary text-primary-foreground border-primary"
-                          : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
+                <div className="space-y-2">
+                  {CATEGORY_GROUPS.map((group) => (
+                    <div key={group.group} className="space-y-1">
+                      <p className="text-xs text-muted-foreground">{group.group}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.categories.map((cat) => (
+                          <button
+                            key={cat.value}
+                            type="button"
+                            onClick={() => update("category", cat.value)}
+                            className={`rounded-full px-2.5 py-1 text-xs font-medium border transition-colors ${
+                              form.category === cat.value
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-transparent text-muted-foreground border-border hover:border-primary/50"
+                            }`}
+                          >
+                            {cat.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -170,7 +202,7 @@ export default function SubmitPage() {
             <div className="space-y-1.5">
               <Label htmlFor="other_story" className="text-foreground">
                 상대방 입장{" "}
-                <span className="text-muted-foreground text-xs font-normal">(선택 — 상대방 말도 적으면 더 공정한 판결)</span>
+                <span className="text-muted-foreground text-xs font-normal">(선택 — 적으면 더 공정한 판결)</span>
               </Label>
               <Textarea
                 id="other_story"
@@ -194,7 +226,7 @@ export default function SubmitPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-full h-11"
             >
               {loading ? (
                 <>
@@ -202,7 +234,7 @@ export default function SubmitPage() {
                   AI 판사에게 전달 중...
                 </>
               ) : (
-                "재판 시작하기"
+                "⚖️ 재판 시작하기"
               )}
             </Button>
           </form>

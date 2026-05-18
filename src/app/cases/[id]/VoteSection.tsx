@@ -14,8 +14,8 @@ interface VoteSectionProps {
 
 export default function VoteSection({ caseData: initial }: VoteSectionProps) {
   const [votes, setVotes] = useState({
-    my_side: initial.vote_my_side,
-    other_side: initial.vote_other_side,
+    my_side: initial.vote_my_side ?? 0,
+    other_side: initial.vote_other_side ?? 0,
   })
   const [myVote, setMyVote] = useState<VoteType | null>(null)
   const [loading, setLoading] = useState(false)

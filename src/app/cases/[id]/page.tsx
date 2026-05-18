@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase"
-import { Case } from "@/types"
+import { createServerSupabase } from "@/lib/supabase-server"
+import { Case, Comment } from "@/types"
 import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -9,6 +10,7 @@ import Link from "next/link"
 import VoteSection from "./VoteSection"
 import VerdictSection from "./VerdictSection"
 import ShareButton from "./ShareButton"
+import CommentSection from "./CommentSection"
 
 export const dynamic = "force-dynamic"
 
@@ -23,17 +25,28 @@ async function getCase(id: string): Promise<Case | null> {
   return data as Case
 }
 
+async function getComments(caseId: string): Promise<Comment[]> {
+  const supabaseServer = createServerSupabase()
+  const { data } = await supabaseServer
+    .from("comments")
+    .select("*")
+    .eq("case_id", caseId)
+    .order("created_at", { ascending: true })
+
+  return (data as Comment[]) ?? []
+}
+
 export default async function CaseDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const caseData = await getCase(id)
+  const [caseData, comments] = await Promise.all([getCase(id), getComments(id)])
 
   if (!caseData) notFound()
 
-  const total = caseData.vote_my_side + caseData.vote_other_side
+  const total = (caseData.vote_my_side ?? 0) + (caseData.vote_other_side ?? 0)
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-4">
@@ -124,6 +137,9 @@ export default async function CaseDetailPage({
 
       {/* 커뮤니티 투표 섹션 */}
       <VoteSection caseData={caseData} />
+
+      {/* 배심원 댓글 섹션 */}
+      <CommentSection caseId={caseData.id} initialComments={comments} />
     </div>
   )
 }

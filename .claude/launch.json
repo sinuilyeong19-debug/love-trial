@@ -5,6 +5,7 @@
       "name": "love-trial",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/yun/love-trial",
       "port": 3000
     }
   ]
