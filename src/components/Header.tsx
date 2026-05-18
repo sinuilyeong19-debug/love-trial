@@ -10,23 +10,28 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-2">
-          <Scale className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold text-foreground">연애 재판</span>
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-2xl items-center justify-between px-4 h-14">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="rounded-lg bg-primary/15 p-1.5 group-hover:bg-primary/25 transition-colors">
+            <Scale className="h-4 w-4 text-primary" />
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-base font-bold text-foreground tracking-tight">연애 재판</span>
+            <span className="text-[10px] text-muted-foreground font-medium hidden sm:inline">LOVE COURT</span>
+          </div>
         </Link>
 
         <Link href="/submit">
           <Button
             size="sm"
             className={cn(
-              "gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90",
-              pathname === "/submit" && "opacity-70"
+              "gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-xs h-8 px-4",
+              pathname === "/submit" && "opacity-60 pointer-events-none"
             )}
           >
-            <PlusCircle className="h-4 w-4" />
-            사연 올리기
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span>사연 올리기</span>
           </Button>
         </Link>
       </div>
